@@ -4,10 +4,10 @@
 class Portal(object):
 
     def __init__(self):
-        self.resonators = None
+        self.resonators = [None] * 8
 
     @property
     def level(self):
-        if not self.resonators:
+        if not all(self.resonators):
             return 1
-        return sum(self.resonators) // 8
+        return sum(filter(lambda r: r is not None, self.resonators)) // 8
