@@ -15,6 +15,7 @@ def test_neutralized_portal_level_is_1(portal):
 @pytest.mark.parametrize("input,expected", [
     ([8, 7, 6, 6, 5, 5, 4, 4], 5),
     ([8, 7, 1, None, None, None, None, None], 2),
+    ([None] * 8, 1)
 ])
 def test_portal_level(portal, input, expected):
     portal.resonators = input
