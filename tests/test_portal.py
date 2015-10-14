@@ -12,16 +12,25 @@ def test_neutralized_portal_level_is_1(portal):
     assert portal.level == 1
 
 
-@pytest.mark.parametrize("input,expected", [
+@pytest.mark.parametrize("resonators,expected", [
     ([8, 7, 6, 6, 5, 5, 4, 4], 5),
     ([8, 7, 1, None, None, None, None, None], 2),
     ([None] * 8, 1)
 ])
-def test_portal_level(portal, input, expected):
-    portal.resonators = input
+def test_portal_level(portal, resonators, expected):
+    portal.resonators = resonators
     assert portal.level == expected
 
 
 def test_set_resonator(portal):
     portal.resonators[0] = 1
     assert portal.resonators == [1, None, None, None, None, None, None, None]
+
+@pytest.mark.parametrize("resonators,expected", [
+    ([8, 7, 6, 6, 5, 5, 4, 4], 30000),
+    ([8] * 8, 48000),
+    ([None] * 8, 0)
+])
+def test_portal_energy(portal, resonators, expected):
+    portal.resonators = resonators
+    assert portal.energy == expected
