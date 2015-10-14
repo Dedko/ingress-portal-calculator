@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 from statistics import mean
-
-RESONATOR_ENERGY = {1: 1000, 2: 1500, 3: 2000, 4: 2500, 5: 3000, 6: 4000, 7: 5000, 8: 6000}  # Lv: XM
-
+from .items import RESONATOR_ENERGY, MultiHack
 
 class Portal(object):
 
     def __init__(self):
         self.resonators = [None] * 8
+        self.mods = [None] * 4
 
     @property
     def level(self):
@@ -29,3 +28,12 @@ class Portal(object):
         if not resonators:
             return 0
         return int(160 * (mean(resonators) ** 4))
+
+    def hacks_before_burnout(self):
+        count = 4
+        multi_hacks = sorted([m for m in self.mods if isinstance(m, MultiHack)], reverse=True)
+        if multi_hacks:
+            count += multi_hacks[0]
+            for mh in multi_hacks[1:]:
+                count += mh // 2
+        return count

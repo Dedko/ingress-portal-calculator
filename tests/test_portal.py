@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import pytest
 
+from ipc.items import MultiHack as MH
+
 
 @pytest.fixture(scope="function")
 def portal():
@@ -45,3 +47,14 @@ def test_portal_energy(portal, resonators, expected):
 def test_portal_range(portal, resonators, expected):
     portal.resonators = resonators
     assert portal.range == expected
+
+
+@pytest.mark.parametrize("mods,expected", [
+    ([MH.very_rare] * 4, 34),
+    ([MH.very_rare, MH.rare, MH.rare, MH.common], 26),
+    ([MH.very_rare, None, None, None], 16),
+    ([None] * 4, 4)
+])
+def test_portal_hacks_befor_burnout(portal, mods, expected):
+    portal.mods = mods
+    assert portal.hacks_before_burnout() == expected
