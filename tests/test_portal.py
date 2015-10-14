@@ -34,3 +34,14 @@ def test_set_resonator(portal):
 def test_portal_energy(portal, resonators, expected):
     portal.resonators = resonators
     assert portal.energy == expected
+
+
+@pytest.mark.parametrize("resonators,expected", [
+    ([8] * 8, 655360),
+    ([1] * 8, 160),
+    ([8, 7, 6, 6, 5, 5, 4, 4], 160180),
+    ([None] * 8, 0)
+])
+def test_portal_range(portal, resonators, expected):
+    portal.resonators = resonators
+    assert portal.range == expected
