@@ -7,6 +7,7 @@ class Portal(object):
     def __init__(self):
         self.resonators = [None] * 8
         self.mods = [None] * 4
+        self._installed_multi_hacks = []
 
     @property
     def level(self):
@@ -31,7 +32,7 @@ class Portal(object):
 
     def hacks_before_burnout(self):
         count = 4
-        multi_hacks = sorted([m for m in self.mods if isinstance(m, MultiHack)], reverse=True)
+        multi_hacks = sorted(self._installed_multi_hacks, reverse=True)
         if multi_hacks:
             count += multi_hacks[0]
             for mh in multi_hacks[1:]:
