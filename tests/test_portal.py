@@ -56,3 +56,14 @@ def test_portal_range(portal, resonators, expected):
 def test_portal_hacks_befor_burnout(portal, multi_hacks, expected):
     portal._installed_multi_hacks = multi_hacks
     assert portal.hacks_before_burnout() == expected
+    
+    
+@pytest.mark.parametrize("heat_shinks,expected", [
+    ([70] * 4, 24),       # VRHS * 4
+    ([70, 50, 50, 20], 45),  # VRHS / RHS * 2 / CHS
+    ([70], 90),           # VRHS * 1
+    ([], 300)               # No HS
+])
+def test_portal_cool_down(portal, heat_shinks, expected):
+    portal._installed_heat_sinks = heat_shinks
+    assert portal.cool_down() == expected
