@@ -11,6 +11,7 @@ class Portal(object):
         self.mods = [None] * 4
         self._installed_multi_hacks = []
         self._installed_heat_sinks = []
+        self._installed_link_amps = []
 
     @property
     def level(self):
@@ -36,7 +37,17 @@ class Portal(object):
         resonators = [r for r in self.resonators if r]
         if not resonators:
             return 0
-        return int(160 * (mean(resonators) ** 4))
+        linkable_range = int(160 * (mean(resonators) ** 4))
+        if self._installed_link_amps:
+            link_amps = sorted(self._installed_link_amps, reverse=True)
+            base = link_amps[0]
+            for n, link_amp in enumerate(link_amps[1:]):
+                if n == 0:
+                    base += (link_amp * 0.25)
+                else:
+                    base += (link_amp * 0.125)
+            return int(linkable_range * base)
+        return int(linkable_range)
 
     def _calc_influence_value_by_mods(self, mods):
         """ Calculate the influence value by MODs

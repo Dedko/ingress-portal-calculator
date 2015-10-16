@@ -67,3 +67,21 @@ def test_portal_hacks_befor_burnout(portal, multi_hacks, expected):
 def test_portal_cool_down(portal, heat_shinks, expected):
     portal._installed_heat_sinks = heat_shinks
     assert portal.cooldown() == expected
+
+
+@pytest.mark.parametrize("resonators,link_amps,expected", [
+    ([1] * 8, [], 160),
+    ([1] * 8, [2], 320),
+    ([1] * 8, [2, 2], 400),
+    ([1] * 8, [2, 2, 2], 440),
+    ([1] * 8, [2, 2, 2, 2], 480),
+    ([8] * 8, [], 655360),
+    ([8] * 8, [7, 2, 2, 2], 5242880),
+    ([8] * 8, [7, 7, 2, 2], 6062080),
+    ([8] * 8, [7, 7, 7, 2], 6471680),
+    ([8] * 8, [7, 7, 7, 7], 6881280),
+])
+def test_portal_linkable_range(portal, resonators, link_amps, expected):
+    portal.resonators = resonators
+    portal._installed_link_amps = link_amps
+    assert portal.linkable_range == expected
